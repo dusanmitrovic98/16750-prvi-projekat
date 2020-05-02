@@ -2,11 +2,13 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: ['babel-polyfill','./src/index.js'],
+  entry: './src/index.js',
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: "./dist"
-     },
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -19,10 +21,18 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-transform-runtime'],
+            cacheDirectory: true
           }
         }
-      }
+      },
+      {
+                 test: /\.(png|svg|jpg|gif)$/,
+                 use: [
+                   'file-loader',
+                ],
+               },
     ]
   }
 };
