@@ -13,6 +13,9 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  node: {
+    fs: "empty"
+ },
   module: {
     rules: [
       {
@@ -28,11 +31,11 @@ module.exports = {
         }
       },
       {
-                 test: /\.(png|svg|jpg|gif)$/,
-                 use: [
-                   'file-loader',
-                ],
-               },
+         test: /\.(png|svg|jpg|gif)$/,
+         use: [
+                'file-loader',
+              ],
+      },
     ]
   }
 };
