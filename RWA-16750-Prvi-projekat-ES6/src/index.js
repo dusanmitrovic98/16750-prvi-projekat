@@ -1,18 +1,28 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
+import { Worker } from './models/worker.js'
+
+
 import imgIcon from './images/PassTheExam-RIIEdition.png';
 
 let test = "Test";
 let test2 = () => console.log(123);
 
-var img1 = document.getElementById('img1');
+
+const button = document.createElement('button');
+let obj = { name: "John", today: new Date(), city: "New York" };
+document.body.appendChild(button);
+button.className = "btn btn-primary";
+button.innerHTML = "ClickMe";
+
+button.onclick = () => {
+    console.log("cliknuto");
+    let fs = require("fs");
+    let doc = document.getElementById("demo");
+    let myJSON = JSON.stringify(obj);
+
+    doc.innerHTML = myJSON;
+}
+
+let img1 = document.getElementById('img1');
 img1.src = imgIcon;
-
-var obj = {
-    table: []
- };
-
- obj.table.push({id: 1000, square:1000});
-
- var json = JSON.stringify(obj);
-
- var fs = require('fs');
-fs.writeFile('myjsonfile.json', json, 'utf8', callback);
