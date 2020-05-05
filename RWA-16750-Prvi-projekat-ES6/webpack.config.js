@@ -2,12 +2,15 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.js',
+    entry: './src/index.ts',
     devtool: 'inline-source-map',
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         port: 9000
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
         filename: 'bundle.js',
@@ -42,6 +45,11 @@ module.exports = {
                     'file-loader',
                 ],
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            }
         ]
     }
 };
