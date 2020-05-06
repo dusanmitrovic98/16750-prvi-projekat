@@ -1,10 +1,13 @@
+import Employee from "../people/employee/employee";
+
+
 export default class ChocolateFactory {
     name: string;
     adress: string;
-    workers: Array<Worker>[];
-    constructor(name: string, adress: string, workers = new Array()) {
+    employees: Array<Employee>[];
+    constructor(name: string, adress: string, employees = new Array()) {
         this.name = name;
         this.adress = adress;
-        this.workers = workers;
+        this.employees = employees;
     }
 }

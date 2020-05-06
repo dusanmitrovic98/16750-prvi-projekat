@@ -1,12 +1,8 @@
-import * as _ from 'lodash';
+import { Truck, TruckState } from "./models/transport/truck/truck";
+import Employee from "./models/people/employee/employee";
 
-function component() {
-    const element = document.createElement('div');
+console.log("hello")
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+let truck = new Truck("f", new Employee("s", "d"), 1, 2, 100, 0);
 
-    return element;
-}
-
-
-document.body.appendChild(component());
+console.log(truck.refilFuelTankToMax());
