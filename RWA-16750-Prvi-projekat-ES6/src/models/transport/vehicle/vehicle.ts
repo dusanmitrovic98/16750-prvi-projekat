@@ -35,12 +35,12 @@ export class Vehicle {
 
     refilFuelTank(litresToRefil: number) {
         let tmpCurentFuelTankLevel = this.currentFuelTankLevel;
-        this.currentFuelTankLevel = this.currentFuelTankLevel + litresToRefil;
+        this.setCurrentFuelTankLevel(this.currentFuelTankLevel + litresToRefil);
         if (this.currentFuelTankLevel <= this.maxFuelTankLevel) {
             return 0;
         }
         else {
-            this.currentFuelTankLevel = this.maxFuelTankLevel;
+            this.setCurrentFuelTankLevel(this.maxFuelTankLevel);
             return this.maxFuelTankLevel - tmpCurentFuelTankLevel;
         }
     }
