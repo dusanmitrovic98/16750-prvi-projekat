@@ -1,10 +1,5 @@
 import { ChocolateProduct } from "./chocolate-product";
 
-/**
- * @class
- * Represents list of chocolate products
- * @param {ChocolateProduct[]} chocolateProductList List of chocolate products
- */
 export class ChocolateProductList {
     chocolateProductList: ChocolateProduct[];
 
@@ -12,12 +7,15 @@ export class ChocolateProductList {
         this.chocolateProductList = chocolateProductList;
     }
 
-    /**
-     * @function
-     * Adds new chocolate product to list of chocolate products
-     * @param newChocolateProduct Chocolate product that will be added to list
-     */
-    addChocolateProductToList(newChocolateProduct: ChocolateProduct) {
+    addProductToList(newChocolateProduct: ChocolateProduct) {
         this.chocolateProductList.push(newChocolateProduct);
+    }
+
+    getProductFromList() {
+        return this.chocolateProductList.pop();
+    }
+
+    getProductListLength() {
+        return this.chocolateProductList.length;
     }
 }
