@@ -2,23 +2,25 @@
  * Add:
  * -Repair time!
  * randomDelay(1000, 5000)
+ * 
+ * 
+ * --------------
+ * 
+ * 
+ * 
+ * dok se puni radnik je na pauzi
+ * 
+ * 
+ * 
+ * check multiple loading unloading
  */
 import { Employee } from "../../people/employee/employee";
 import { Vehicle } from "../vehicle/vehicle";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
 import { ChocolateMaterialList } from "../../chocolate-materials/chocolate-material-list";
+import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
+import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
 
-/**
- * @enum
- * Represents current truck state
- * @param TruckState Represents trucks current state
- * @param Avaible Truck avaible for usage, ready on standby
- * @param InTransport Truck is in transport
- * @param Broken Truck is broken, repair needed
- * @param InRepair Truck in repair process
- * @param IsBeingLoaded The truck is being filled with material
- * @param IsBeingUnloaded Unloading material from the truck
- */
 export enum TruckState {
     Avaible = "Avaible",
     InTransport = "InTransport",
@@ -28,14 +30,6 @@ export enum TruckState {
     IsBeingUnloaded = "IsBeingUnloaded"
 }
 
-/**
- * @enum
- * Represents Truck cargo work state. Loading or unloading, materials or products, to or from cargo
- * @param ChocolateMaterialLoading Loading chocolate materials to cargo
- * @param ChocolateMaterialUnloading Unloading chocolate materials from cargo
- * @param ChocolateProductLoading Loading chocolate products to cargo
- * @param ChocolateProductUnloading Unloading chocolate products from cargo
- */
 export enum TruckCargoWorkState {
     ChocolateMaterialLoading = "ChocolateMaterialLoading",
     ChocolateMaterialUnloading = "ChocolateMaterialUnloading",
@@ -43,82 +37,187 @@ export enum TruckCargoWorkState {
     ChocolateProductUnloading = "ChocolateProductUnloading"
 }
 
-/**
- * @class
- * Represents truck model
- * @param {string} brand Truck brand
- * @param {Employee} driver Truck driver (factory employee)
- * @param {number} speed Truck speed (km/h ... kilometers per hour)
- * @param {number} maxFuelTankLevel Truck maximum fuel level in litres. Default 1400
- * @param {number} fuelConsumptionPer100Km Truck fuel consumption level per one hundred kilometres in litres. Default 27.5
- * @param {number} currentFuelTankLevel Truck current fuel level. Default value = 0
- * @param {TruckState} truckState Truck current state. DefaultValue = TruckState.Avaible
- * @param {TruckCargoWorkState} truckCargoWorkState Truck cargo current state. TruckCargoWorkState.ChocolateMaterialLoading
- * TruckCargoCurent
- */
 export class Truck extends Vehicle {
     brand: string;
     driver: Employee;
-    cargo: ChocolateProductList | ChocolateMaterialList;
-    truckState: TruckState;
-    truckCargoWorkState: TruckCargoWorkState;
+    materialCargo: ChocolateMaterialList;
+    productCargo: ChocolateProductList;
+    cargoMaxCapacity: number;
+    state: TruckState;
+    cargoWorkState: TruckCargoWorkState;
 
-    constructor(brand: string, driver: Employee, cargo: ChocolateProductList | ChocolateMaterialList = new ChocolateMaterialList,
-        speed: number, maxFuelTankLevel: number = 1400, fuelConsumptionPer100Km: number = 27.5, currentFuelTankLevel: number = 0,
-        truckState: TruckState = TruckState.Avaible, truckCargoWorkState: TruckCargoWorkState = TruckCargoWorkState.ChocolateMaterialLoading) {
-        super(speed, maxFuelTankLevel, fuelConsumptionPer100Km, currentFuelTankLevel);
+    constructor(brand: string, driver: Employee, cargoMaxCapacity: number = 10000) {
+        super(0, 1400, 27.5);
         this.brand = brand;
         this.driver = driver;
-        this.cargo = cargo;
-        this.truckState = truckState;
-        this.truckCargoWorkState = truckCargoWorkState;
+        this.materialCargo = new ChocolateMaterialList;
+        this.productCargo = new ChocolateProductList;
+        this.cargoMaxCapacity = cargoMaxCapacity;
+        this.state = TruckState.Avaible;
+        this.cargoWorkState = TruckCargoWorkState.ChocolateMaterialLoading;
     }
 
-    /**
-     * @function 
-     * Sets truck state to Avaible
-     */
+    setBrand(brand: string) {
+        this.brand = brand;
+    }
+
+    setDriver(driver: Employee) {
+        this.driver = driver;
+    }
+
+    setCargoMaxCapacity(newCargoMaxCapacity: number) {
+        this.cargoMaxCapacity = newCargoMaxCapacity;
+    }
+
     setStateToAvaible() {
-        this.truckState = TruckState.Avaible;
+        this.state = TruckState.Avaible;
     }
 
-    /**
-     * @function 
-     * Sets truck state to InTransport
-     */
     setStateToInTransport() {
-        this.truckState = TruckState.InTransport;
+        this.state = TruckState.InTransport;
     }
 
-    /**
-     * @function 
-     * Sets truck state to  Broken
-     */
     setStateToBroken() {
-        this.truckState = TruckState.Broken;
+        this.state = TruckState.Broken;
     }
 
-    /**
-     * @function
-     * Sets truck state to InRepair
-     */
     setStateToInRepair() {
-        this.truckState = TruckState.InRepair;
+        this.state = TruckState.InRepair;
     }
 
-    /**
-     * @function 
-     * Sets truck state to IsBeingLoaded
-     */
     setStateToIsBeingLoaded() {
-        this.truckState = TruckState.IsBeingLoaded;
+        this.state = TruckState.IsBeingLoaded;
     }
 
-    /**
-     * @function 
-     * Sets truck state to IsBeingUnloaded
-     */
     setStateToIsBeingUnloaded() {
-        this.truckState = TruckState.IsBeingUnloaded;
+        this.state = TruckState.IsBeingUnloaded;
+    }
+
+    isStateAvaible() {
+        return this.state === TruckState.Avaible;
+    }
+
+    isStateInTransport() {
+        return this.state === TruckState.InTransport;
+    }
+
+    isStateBroken() {
+        return this.state === TruckState.Broken;
+    }
+
+    isStateInRepair() {
+        return this.state === TruckState.InRepair;
+    }
+
+    isStateIsBeingLoaded() {
+        return this.state === TruckState.IsBeingLoaded;
+    }
+
+    isStateIsBeingUnloaded() {
+        return this.state === TruckState.IsBeingUnloaded;
+    }
+
+    setCargoStateToChocolateMaterialLoading() {
+        this.cargoWorkState = TruckCargoWorkState.ChocolateMaterialLoading;
+    }
+
+    setCargoStateToChocolateMaterialUnLoading() {
+        this.cargoWorkState = TruckCargoWorkState.ChocolateMaterialUnloading;
+    }
+
+    setCargoStateToChocolateProductLoading() {
+        this.cargoWorkState = TruckCargoWorkState.ChocolateProductLoading;
+    }
+
+    setCargoStateToChocolateProductUnloading() {
+        this.cargoWorkState = TruckCargoWorkState.ChocolateProductUnloading;
+    }
+
+    isCargoStateChocolateMaterialLoading() {
+        return this.cargoWorkState === TruckCargoWorkState.ChocolateMaterialLoading;
+    }
+
+    isCargoStateChocolateMaterialUnloading() {
+        return this.cargoWorkState === TruckCargoWorkState.ChocolateMaterialUnloading;
+    }
+
+    isCargoStateChocolateProductLoading() {
+        return this.cargoWorkState === TruckCargoWorkState.ChocolateMaterialUnloading;
+    }
+
+    isCargoStateChocolateProductUnloading() {
+        return this.cargoWorkState === TruckCargoWorkState.ChocolateProductUnloading;
+    }
+
+    isMaterialLoading() {
+        return this.isCargoStateChocolateMaterialLoading() && this.isStateIsBeingLoaded();
+    }
+
+    isMaterialUnloading() {
+        return this.isCargoStateChocolateMaterialUnloading() && this.isStateIsBeingUnloaded();
+    }
+
+    isProductLoading() {
+        return this.isCargoStateChocolateProductLoading() && this.isStateIsBeingLoaded();
+    }
+
+    isProductUnloading() {
+        return this.isCargoStateChocolateProductUnloading() && this.isStateIsBeingUnloaded();
+    }
+
+    cargoCurrentlyOccupiedSpace() {
+        return this.materialCargo.getMaterialListLength() + this.productCargo.getProductListLength();
+    }
+
+    isThereFreeSpace() {
+        return this.cargoCurrentlyOccupiedSpace() < this.cargoMaxCapacity;
+    }
+
+    isCargoEmpty() {
+        return this.cargoCurrentlyOccupiedSpace() == 0;
+    }
+
+    isMaterialCargoEmpty() {
+        return this.materialCargo.getMaterialListLength() == 0;
+    }
+
+    isProductCargoEmpty() {
+        return this.productCargo.getProductListLength() == 0;
+    }
+
+    loadOneMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+        if (this.isThereFreeSpace()) {
+            this.materialCargo.addMaterialToList(chocolateMaterial);
+        }
+    }
+
+    unloadOneMaterialFromCargo() {
+        if (!this.isMaterialCargoEmpty()) {
+            return this.materialCargo.getMaterialFromList();
+        }
+    }
+
+    loadOneProductToCargo(chocolateProduct: ChocolateProduct) {
+        if (this.isThereFreeSpace()) {
+            this.productCargo.addProductToList(chocolateProduct);
+        }
+    }
+
+    unloadOneProductFromCargo() {
+        if (!this.isProductCargoEmpty()) {
+            return this.productCargo.getProductFromList();
+        }
+    }
+
+    workWithCargoOnce(newMaterial?: ChocolateMaterial, newProduct?: ChocolateProduct) {
+        if (this.isMaterialLoading()) {
+            this.loadOneMaterialToCargo(newMaterial);
+        } else if (this.isMaterialUnloading()) {
+            return this.unloadOneMaterialFromCargo();
+        } else if (this.isProductLoading()) {
+            this.loadOneProductToCargo(newProduct);
+        } else if (this.isProductUnloading()) {
+            return this.unloadOneProductFromCargo();
+        }
     }
 }

@@ -3,15 +3,56 @@ import { Employee } from "./models/people/employee/employee";
 import { Empolyeer } from "./models/people/employeer/employeer";
 import { FormatString } from "./.bin/string-manipulation/string-manipulation"
 import { ChocolateMaterialList } from "./models/chocolate-materials/chocolate-material-list";
+import { ChocolateMaterial, ChocolateMaterialType } from "./models/chocolate-materials/chocolate-material";
+import { PalletJack } from "./models/factory-machines/pallet-jack/pallet-jack";
 
 console.log("hello")
 
 let chocolateMaterialList: ChocolateMaterialList;
 
-let truck = new Truck("f", new Employee("s", "d", new Empolyeer("Bob", "Martin")), chocolateMaterialList, 1, 2, 100, 0);
+let truck = new Truck("Ford", new Employee("Dusan", "Mitrovic", new Empolyeer("Milos", "Mitrovic")));
+let palletJack = new PalletJack(new Employee("Dusan", "Mitrovic", new Empolyeer("Milos", "Mitrovic")));
 
-console.log(truck.refilFuelTankToMaximum());
+let chocolateMaterial1: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.MilkChocolateMaterial);
+let chocolateMaterial2: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.DarkChocolateMaterial);;
+let chocolateMaterial3: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.RubyChocolateMaterial);;
+let chocolateMaterial4: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.MilkChocolateMaterial);;
+let chocolateMaterial5: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.DarkChocolateMaterial);;
 
-console.log(truck.driver.factoryEmployeer.employeerMoodState);
 
-console.log(FormatString(truck.driver.factoryEmployeer.employeerWorkState.toString(), ""));
+truck.setCargoStateToChocolateMaterialLoading();
+truck.setStateToIsBeingLoaded();
+
+truck.workWithCargoOnce(chocolateMaterial1);
+truck.workWithCargoOnce(chocolateMaterial2);
+truck.workWithCargoOnce(chocolateMaterial3);
+truck.workWithCargoOnce(chocolateMaterial4);
+truck.workWithCargoOnce(chocolateMaterial5);
+
+
+palletJack.setCargoStateToChocolateMaterialLoading();
+palletJack.setStateToIsBeingLoaded();
+
+palletJack.workWithCargoOnce(chocolateMaterial1);
+palletJack.workWithCargoOnce(chocolateMaterial2);
+palletJack.workWithCargoOnce(chocolateMaterial3);
+palletJack.workWithCargoOnce(chocolateMaterial4);
+palletJack.workWithCargoOnce(chocolateMaterial5);
+
+console.log(truck);
+console.log(palletJack);
+
+
+
+palletJack.setCargoStateToChocolateMaterialUnLoading();
+palletJack.setStateToIsBeingUnloaded();
+
+/*
+while (!palletJack.isCargoEmpty()) {
+    truck.workWithCargoOnce();
+}*/
+console.log(palletJack.workWithCargoOnce());
+console.log(truck);
+
+console.log(FormatString(truck.cargoWorkState, " ", true));
+

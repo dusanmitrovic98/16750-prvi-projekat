@@ -23,8 +23,12 @@ export class Vehicle {
         return this.fuelConsumptionPer100Km / 100;
     }
 
-    getFuelDifference() {
-        return this.maxFuelTankLevel - this.currentFuelTankLevel;
+    getFuelDifference(fuelTankLevelToCheck?: number) {
+        if (fuelTankLevelToCheck) {
+            return this.maxFuelTankLevel - fuelTankLevelToCheck;
+        } else {
+            return this.maxFuelTankLevel - this.currentFuelTankLevel;
+        }
     }
 
     refilFuelTankToMaximum() {
@@ -33,15 +37,19 @@ export class Vehicle {
         return fuelUsed;
     }
 
+    isCurrentLowerOrEqualThanMaximumTankFuelLevel() {
+        return this.currentFuelTankLevel <= this.maxFuelTankLevel;
+    }
+
     refilFuelTank(litresToRefil: number) {
-        let tmpCurentFuelTankLevel = this.currentFuelTankLevel;
-        this.currentFuelTankLevel = this.currentFuelTankLevel + litresToRefil;
-        if (this.currentFuelTankLevel <= this.maxFuelTankLevel) {
+        let tmpCurentFuelTankLevel = this.getCurrentFuelTankLevel();
+        this.setCurrentFuelTankLevel(this.getCurrentFuelTankLevel() + litresToRefil);
+        if (this.isCurrentLowerOrEqualThanMaximumTankFuelLevel()) {
             return 0;
         }
         else {
-            this.currentFuelTankLevel = this.maxFuelTankLevel;
-            return this.maxFuelTankLevel - tmpCurentFuelTankLevel;
+            this.setCurrentFuelTankLevel(this.maxFuelTankLevel);
+            return this.getFuelDifference(tmpCurentFuelTankLevel);
         }
     }
 }
