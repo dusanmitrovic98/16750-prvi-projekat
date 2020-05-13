@@ -5,11 +5,28 @@ export enum ChocolateMaterialType {
   RubyChocolateMaterial = "RubyChocolateMaterial",
 }
 
+enum ProductionState {
+  ReadyForProduction = "ReadyForProduction",
+  NotReadyForProduction = "NotReadyForProduction",
+}
+
 export class ChocolateMaterial {
+  id: number;
   chocolateMaterialType: ChocolateMaterialType;
+  productionState: ProductionState;
 
   constructor(chocolateMaterialType: ChocolateMaterialType = ChocolateMaterialType.DarkChocolateMaterial) {
+    this.id = undefined;
     this.chocolateMaterialType = chocolateMaterialType;
+    this.productionState = ProductionState.NotReadyForProduction;
+  }
+
+  setId(id: number) {
+    this.id = id;
+  }
+
+  getId() {
+    return this.id;
   }
 
   setMaterialTypeToMilkChocolateMaterial() {
@@ -41,5 +58,21 @@ export class ChocolateMaterial {
 
   isMaterialTypeRubyChocolateMaterial() {
     return this.chocolateMaterialType === ChocolateMaterialType.RubyChocolateMaterial;
+  }
+
+  setProductionStateToReadyForProduction() {
+    this.productionState = ProductionState.ReadyForProduction;
+  }
+
+  setProductionStateToNotReadyForProduction() {
+    this.productionState = ProductionState.NotReadyForProduction;
+  }
+
+  isProductionStateReadyForProduction() {
+    return this.productionState === ProductionState.ReadyForProduction;
+  }
+
+  isProductionStateNotReadyForProduction() {
+    return this.productionState === ProductionState.NotReadyForProduction;
   }
 }

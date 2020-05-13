@@ -18,8 +18,8 @@ import { Employee } from "../../people/employee/employee";
 import { Vehicle } from "../vehicle/vehicle";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
 import { ChocolateMaterialList } from "../../chocolate-materials/chocolate-material-list";
-import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
-import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
+import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
+import { ChocolateMaterial, ChocolateMaterialType } from "../../chocolate-materials/chocolate-material";
 
 export enum TruckState {
   Avaible = "Avaible",
@@ -40,19 +40,31 @@ export enum TruckCargoWorkState {
 export class Truck extends Vehicle {
   brand: string;
   driver: Employee;
-  materialCargo: ChocolateMaterialList;
-  productCargo: ChocolateProductList;
-  cargoMaxCapacity: number;
+  darkChocolateMaterialCargo: ChocolateMaterialList;
+  whiteChocolateMaterialCargo: ChocolateMaterialList;
+  milkChocolateMaterialCargo: ChocolateMaterialList;
+  rubyChocolateMaterialCargo: ChocolateMaterialList;
+  darkChocolateProductCargo: ChocolateProductList;
+  whiteChocolateProductCargo: ChocolateProductList;
+  milkChocolateProductCargo: ChocolateProductList;
+  rubyChocolateProductCargo: ChocolateProductList;
+  maximumCargoCapacity: number;
   state: TruckState;
   cargoWorkState: TruckCargoWorkState;
 
-  constructor(brand: string, driver: Employee, cargoMaxCapacity: number = 10000) {
+  constructor(brand: string, driver: Employee, maximumCargoCapacity: number = 10000) {
     super(0, 1400, 27.5);
     this.brand = brand;
     this.driver = driver;
-    this.materialCargo = new ChocolateMaterialList();
-    this.productCargo = new ChocolateProductList();
-    this.cargoMaxCapacity = cargoMaxCapacity;
+    this.darkChocolateMaterialCargo = new ChocolateMaterialList();
+    this.whiteChocolateMaterialCargo = new ChocolateMaterialList();
+    this.milkChocolateMaterialCargo = new ChocolateMaterialList();
+    this.rubyChocolateMaterialCargo = new ChocolateMaterialList();
+    this.darkChocolateProductCargo = new ChocolateProductList();
+    this.whiteChocolateProductCargo = new ChocolateProductList();
+    this.milkChocolateProductCargo = new ChocolateProductList();
+    this.rubyChocolateProductCargo = new ChocolateProductList();
+    this.maximumCargoCapacity = maximumCargoCapacity;
     this.state = TruckState.Avaible;
     this.cargoWorkState = TruckCargoWorkState.ChocolateMaterialLoading;
   }
@@ -65,8 +77,8 @@ export class Truck extends Vehicle {
     this.driver = driver;
   }
 
-  setCargoMaxCapacity(newCargoMaxCapacity: number) {
-    this.cargoMaxCapacity = newCargoMaxCapacity;
+  setCargoMaxCapacity(newMaximumCargoCapacity: number) {
+    this.maximumCargoCapacity = newMaximumCargoCapacity;
   }
 
   setStateToAvaible() {
@@ -142,7 +154,7 @@ export class Truck extends Vehicle {
   }
 
   isCargoStateChocolateProductLoading() {
-    return this.cargoWorkState === TruckCargoWorkState.ChocolateMaterialUnloading;
+    return this.cargoWorkState === TruckCargoWorkState.ChocolateProductLoading;
   }
 
   isCargoStateChocolateProductUnloading() {
@@ -165,12 +177,64 @@ export class Truck extends Vehicle {
     return this.isCargoStateChocolateProductUnloading() && this.isStateIsBeingUnloaded();
   }
 
+  getDarkChocolateMaterialCargoListLength() {
+    return this.darkChocolateMaterialCargo.getMaterialListLength();
+  }
+
+  getWhiteChocolateMaterialCargoListLength() {
+    return this.whiteChocolateMaterialCargo.getMaterialListLength();
+  }
+
+  getMilkChocolateMaterialCargoListLength() {
+    return this.milkChocolateMaterialCargo.getMaterialListLength();
+  }
+
+  getRubyChocolateMaterialCargoListLength() {
+    return this.rubyChocolateMaterialCargo.getMaterialListLength();
+  }
+
+  getDarkChocolateProductCargoListLength() {
+    return this.darkChocolateProductCargo.getProductListLength();
+  }
+
+  getWhiteChocolateProductCargoListLength() {
+    return this.whiteChocolateProductCargo.getProductListLength();
+  }
+
+  getMilkChocolateProductCargoListLength() {
+    return this.milkChocolateProductCargo.getProductListLength();
+  }
+
+  getRubyChocolateProductCargoListLength() {
+    return this.rubyChocolateProductCargo.getProductListLength();
+  }
+
+  getMaterialCargoCurrentlyOccupiedSpace() {
+    let materialCargoSpace: number = 0;
+    materialCargoSpace += this.getDarkChocolateMaterialCargoListLength();
+    materialCargoSpace += this.getWhiteChocolateMaterialCargoListLength();
+    materialCargoSpace += this.getMilkChocolateMaterialCargoListLength();
+    materialCargoSpace += this.getRubyChocolateMaterialCargoListLength();
+    return materialCargoSpace;
+  }
+
+  getProductCargoCurrentlyOcuppiedSpace() {
+    let productCargoSpace: number = 0;
+    productCargoSpace += this.getDarkChocolateProductCargoListLength();
+    productCargoSpace += this.getWhiteChocolateProductCargoListLength();
+    productCargoSpace += this.getMilkChocolateProductCargoListLength();
+    productCargoSpace += this.getRubyChocolateProductCargoListLength();
+    return productCargoSpace;
+  }
+
   cargoCurrentlyOccupiedSpace() {
-    return this.materialCargo.getMaterialListLength() + this.productCargo.getProductListLength();
+    let materialCargoSpace: number = this.getMaterialCargoCurrentlyOccupiedSpace();
+    let productCargoSpace: number = this.getProductCargoCurrentlyOcuppiedSpace();
+    return materialCargoSpace + productCargoSpace;
   }
 
   isThereFreeSpace() {
-    return this.cargoCurrentlyOccupiedSpace() < this.cargoMaxCapacity;
+    return this.cargoCurrentlyOccupiedSpace() < this.maximumCargoCapacity;
   }
 
   isCargoEmpty() {
@@ -178,46 +242,221 @@ export class Truck extends Vehicle {
   }
 
   isMaterialCargoEmpty() {
-    return this.materialCargo.getMaterialListLength() == 0;
+    return this.getMaterialCargoCurrentlyOccupiedSpace() == 0;
   }
 
   isProductCargoEmpty() {
-    return this.productCargo.getProductListLength() == 0;
+    return this.getProductCargoCurrentlyOcuppiedSpace() == 0;
   }
 
-  loadOneMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+  isDarkChocolateMaterialCargoEmpty() {
+    return this.getDarkChocolateMaterialCargoListLength() == 0;
+  }
+
+  isWhiteChocolateMaterialCargoEmpty() {
+    return this.getWhiteChocolateMaterialCargoListLength() == 0;
+  }
+
+  isMilkChocolateMaterialCargoEmpty() {
+    return this.getMilkChocolateMaterialCargoListLength() == 0;
+  }
+
+  isRubyChocolateMaterialCargoEmpty() {
+    return this.getRubyChocolateMaterialCargoListLength() == 0;
+  }
+
+  isDarkChocolateProductCargoEmpty() {
+    return this.getDarkChocolateProductCargoListLength() == 0;
+  }
+
+  isWhiteChocolateProductCargoEmpty() {
+    return this.getWhiteChocolateProductCargoListLength() == 0;
+  }
+
+  isMilkChocolateProductCargoEmpty() {
+    return this.getMilkChocolateProductCargoListLength() == 0;
+  }
+
+  isRubyChocolateProductCargoEmpty() {
+    return this.getRubyChocolateProductCargoListLength() == 0;
+  }
+
+  loadOneDarkChocolateMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
     if (this.isThereFreeSpace()) {
-      this.materialCargo.addMaterialToList(chocolateMaterial);
+      this.darkChocolateMaterialCargo.addMaterialToList(chocolateMaterial);
     }
   }
 
-  unloadOneMaterialFromCargo() {
-    if (!this.isMaterialCargoEmpty()) {
-      return this.materialCargo.getMaterialFromList();
+  loadOneWhiteChocolateMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+    if (this.isThereFreeSpace()) {
+      this.whiteChocolateMaterialCargo.addMaterialToList(chocolateMaterial);
+    }
+  }
+
+  loadOneMilkChocolateMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+    if (this.isThereFreeSpace()) {
+      this.milkChocolateMaterialCargo.addMaterialToList(chocolateMaterial);
+    }
+  }
+
+  loadOneRubyChocolateMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+    if (this.isThereFreeSpace()) {
+      this.rubyChocolateMaterialCargo.addMaterialToList(chocolateMaterial);
+    }
+  }
+
+  loadOneMaterialToCargo(chocolateMaterial: ChocolateMaterial) {
+    if (chocolateMaterial.isMaterialTypeDarkChocolateMaterial()) {
+      this.loadOneDarkChocolateMaterialToCargo(chocolateMaterial);
+    }
+    if (chocolateMaterial.isMaterialTypeWhiteChocolateMaterial()) {
+      this.loadOneWhiteChocolateMaterialToCargo(chocolateMaterial);
+    }
+    if (chocolateMaterial.isMaterialTypeMilkChocolateMaterial()) {
+      this.loadOneMilkChocolateMaterialToCargo(chocolateMaterial);
+    }
+    if (chocolateMaterial.isMaterialTypeRubyChocolateMaterial()) {
+      this.loadOneRubyChocolateMaterialToCargo(chocolateMaterial);
+    }
+  }
+
+  loadOneDarkChocolateProductToCargo(chocolateProduct: ChocolateProduct) {
+    if (this.isThereFreeSpace()) {
+      this.darkChocolateProductCargo.addProductToList(chocolateProduct);
+    }
+  }
+
+  loadOneWhiteChocolateProductToCargo(chocolateProduct: ChocolateProduct) {
+    if (this.isThereFreeSpace()) {
+      this.whiteChocolateProductCargo.addProductToList(chocolateProduct);
+    }
+  }
+
+  loadOneMilkChocolateProductToCargo(chocolateProduct: ChocolateProduct) {
+    if (this.isThereFreeSpace()) {
+      this.milkChocolateProductCargo.addProductToList(chocolateProduct);
+    }
+  }
+
+  loadOneRubyChocolateProductToCargo(chocolateProduct: ChocolateProduct) {
+    if (this.isThereFreeSpace()) {
+      this.rubyChocolateProductCargo.addProductToList(chocolateProduct);
     }
   }
 
   loadOneProductToCargo(chocolateProduct: ChocolateProduct) {
-    if (this.isThereFreeSpace()) {
-      this.productCargo.addProductToList(chocolateProduct);
+    if (chocolateProduct.isChocolateProductTypeDarkChocolate) {
+      this.loadOneDarkChocolateProductToCargo(chocolateProduct);
+    }
+    if (chocolateProduct.isChocolateProductTypeWhiteChocolate()) {
+      this.loadOneWhiteChocolateProductToCargo(chocolateProduct);
+    }
+    if (chocolateProduct.isChocolateProductTypeMilkChocolate()) {
+      this.loadOneMilkChocolateProductToCargo(chocolateProduct);
+    }
+    if (chocolateProduct.isChocolateProductTypeRubyChocolate()) {
+      this.loadOneRubyChocolateProductToCargo(chocolateProduct);
     }
   }
 
-  unloadOneProductFromCargo() {
-    if (!this.isProductCargoEmpty()) {
-      return this.productCargo.getProductFromList();
+  unloadOneDarkChocolateMaterialFromCargo() {
+    if (!this.isDarkChocolateMaterialCargoEmpty()) {
+      return this.darkChocolateMaterialCargo.getMaterialFromList();
     }
   }
 
-  workWithCargoOnce(newMaterial?: ChocolateMaterial, newProduct?: ChocolateProduct) {
-    if (this.isMaterialLoading()) {
+  unloadOneWhiteChocolateMaterialFromCargo() {
+    if (!this.isWhiteChocolateMaterialCargoEmpty()) {
+      return this.whiteChocolateMaterialCargo.getMaterialFromList();
+    }
+  }
+
+  unloadOneMilkChocolateMaterialFromCargo() {
+    if (!this.isMilkChocolateMaterialCargoEmpty()) {
+      return this.milkChocolateMaterialCargo.getMaterialFromList();
+    }
+  }
+
+  unloadOneRubyChocolateMaterialFromCargo() {
+    if (!this.isRubyChocolateMaterialCargoEmpty()) {
+      return this.rubyChocolateMaterialCargo.getMaterialFromList();
+    }
+  }
+
+  unloadOneMaterialFromCargo(chocolateMaterialType: ChocolateMaterialType) {
+    if (chocolateMaterialType === ChocolateMaterialType.DarkChocolateMaterial) {
+      return this.unloadOneDarkChocolateMaterialFromCargo();
+    }
+    if (chocolateMaterialType === ChocolateMaterialType.WhiteChocolateMaterial) {
+      return this.unloadOneWhiteChocolateMaterialFromCargo();
+    }
+    if (chocolateMaterialType === ChocolateMaterialType.MilkChocolateMaterial) {
+      this.unloadOneMilkChocolateMaterialFromCargo();
+    }
+    if (chocolateMaterialType === ChocolateMaterialType.RubyChocolateMaterial) {
+      return this.unloadOneRubyChocolateMaterialFromCargo();
+    }
+    return null;
+  }
+
+  unloadOneDarkChocolateProductFromCargo() {
+    if (!this.isDarkChocolateProductCargoEmpty()) {
+      return this.darkChocolateProductCargo.getProductFromList();
+    }
+  }
+
+  unloadOneWhiteChocolateProductFromCargo() {
+    if (!this.isWhiteChocolateProductCargoEmpty()) {
+      return this.whiteChocolateProductCargo.getProductFromList();
+    }
+  }
+
+  unloadOneMilkChocolateProductFromCargo() {
+    if (!this.isMilkChocolateProductCargoEmpty()) {
+      return this.milkChocolateProductCargo.getProductFromList();
+    }
+  }
+
+  unloadOneRubyChocolateProductFromCargo() {
+    if (!this.isMilkChocolateProductCargoEmpty()) {
+      return this.milkChocolateProductCargo.getProductFromList();
+    }
+  }
+
+  unloadOneProductFromCargo(chocolateProductType: ChocolateProductType) {
+    if (chocolateProductType === ChocolateProductType.DarkChocolate) {
+      return this.unloadOneDarkChocolateProductFromCargo();
+    }
+    if (chocolateProductType === ChocolateProductType.WhiteChocolate) {
+      return this.unloadOneWhiteChocolateProductFromCargo();
+    }
+    if (chocolateProductType === ChocolateProductType.MilkChocolate) {
+      this.unloadOneMilkChocolateProductFromCargo();
+    }
+    if (chocolateProductType === ChocolateProductType.RubyChocolate) {
+      return this.unloadOneRubyChocolateProductFromCargo();
+    }
+    return null;
+  }
+
+  workWithCargoOnce(
+    newMaterial?: ChocolateMaterial,
+    newProduct?: ChocolateProduct,
+    chocolateMaterialType?: ChocolateMaterialType,
+    chocolateProductType?: ChocolateProductType
+  ) {
+    if (this.isMaterialLoading() && newMaterial != null) {
       this.loadOneMaterialToCargo(newMaterial);
-    } else if (this.isMaterialUnloading()) {
-      return this.unloadOneMaterialFromCargo();
-    } else if (this.isProductLoading()) {
-      this.loadOneProductToCargo(newProduct);
-    } else if (this.isProductUnloading()) {
-      return this.unloadOneProductFromCargo();
     }
+    if (this.isMaterialUnloading() && chocolateProductType) {
+      return this.unloadOneMaterialFromCargo(chocolateMaterialType);
+    }
+    if (this.isProductLoading() && newProduct != null) {
+      this.loadOneProductToCargo(newProduct);
+    }
+    if (this.isProductUnloading() && chocolateProductType) {
+      return this.unloadOneProductFromCargo(chocolateProductType);
+    }
+    return null;
   }
 }

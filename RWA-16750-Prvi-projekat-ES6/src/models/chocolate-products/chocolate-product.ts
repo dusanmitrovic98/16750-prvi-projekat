@@ -5,17 +5,27 @@ export enum ChocolateProductType {
   RubyChocolate = "RubyChocolate",
 }
 
-export enum ProductPackedState {
+enum ProductPackedState {
   Packed = "Packed",
   NotPacked = "NotPacked",
 }
 export class ChocolateProduct {
+  id: number;
   chocolateProductType: ChocolateProductType;
   packedState: ProductPackedState;
 
   constructor(chocolateProductType: ChocolateProductType = ChocolateProductType.DarkChocolate) {
+    this.id = undefined;
     this.chocolateProductType = chocolateProductType;
     this.packedState = ProductPackedState.NotPacked;
+  }
+
+  setId(id: number) {
+    this.id;
+  }
+
+  getId() {
+    return this.id;
   }
 
   setProductTypeToMilkChocolate() {
