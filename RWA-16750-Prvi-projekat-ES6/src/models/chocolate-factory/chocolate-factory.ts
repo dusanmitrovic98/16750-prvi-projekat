@@ -1,19 +1,20 @@
-import { Employee } from "../people/employee/employee";
+import { EmployeeList } from "../people/employee/employe-list";
 
 export enum FactorySector {
-    Preparation,
-    Production,
-    Packing,
-    Delivery
+  Procurement = "Procurement",
+  Preparation = "Preparation",
+  Production = "Production",
+  Packing = "Packing",
+  Delivery = "Delivery",
 }
 
 export class ChocolateFactory {
-    name: string;
-    adress: string;
-    employees: Employee[];
-    constructor(name: string, adress: string, employees = new Array()) {
-        this.name = name;
-        this.adress = adress;
-        this.employees = employees;
-    }
+  name: string;
+  adress: string;
+  employees: EmployeeList;
+  constructor(name: string, adress: string) {
+    this.name = name;
+    this.adress = adress;
+    this.employees = new EmployeeList();
+  }
 }

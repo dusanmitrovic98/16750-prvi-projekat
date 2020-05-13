@@ -1,29 +1,62 @@
 /**
- *
+ *  nakon jela proizvodnja par sekundi brza
  * produce product but remove material from list of materials
  */
 
 import { Person } from "../person/person";
 import { FactorySector } from "../../chocolate-factory/chocolate-factory";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
-import { ChocolateMaterial, ChocolateMaterialType } from "../../chocolate-materials/chocolate-material";
-import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
+import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
+import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
 import { Empolyeer } from "../employeer/employeer";
 
-export enum EmployeeWorkState {
+enum EmployeeWorkState {
   Working = "Working",
-  LunchPause = "",
+  LunchBreak = "LaunchBreak",
+  NotPresent = "NotPresent",
 }
 
 export class Employee extends Person {
   factoryEmployeer: Empolyeer;
   factorySector: FactorySector;
   producedChocolateGoods: ChocolateProductList;
+  workState: EmployeeWorkState;
+  workEficiencyRating: number;
+  stolenChocolates: ChocolateProductList;
+  payment: number;
 
   constructor(name: string, lastName: string, factoryEmployeer: Empolyeer, drivingLicence: boolean = false) {
     super(name, lastName, drivingLicence);
     this.factoryEmployeer = factoryEmployeer;
     this.producedChocolateGoods = new ChocolateProductList();
+    this.workState = EmployeeWorkState.NotPresent;
+    this.workEficiencyRating = 10;
+    this.stolenChocolates = new ChocolateProductList();
+    this.payment = 0;
+  }
+
+  setWorkStateToWorking() {
+    this.workState = EmployeeWorkState.Working;
+  }
+
+  setWorkStateToLaunchBreak() {
+    this.workState = EmployeeWorkState.LunchBreak;
+  }
+
+  setWorkStateToNotPresent() {
+    this.workState = EmployeeWorkState.NotPresent;
+  }
+
+  isWorkStateWorking() {
+    return this.workState === EmployeeWorkState.Working;
+  }
+
+  isWorkStateLaunchBreak() {
+    return this.workState === EmployeeWorkState.LunchBreak;
+  }
+
+  isWorkStateNotPresent() {
+    return this.workState === EmployeeWorkState.NotPresent;
   }
 
   produceChocolateProduct(chocolateMaterial: ChocolateMaterial) {
@@ -64,10 +97,28 @@ export class Employee extends Person {
   }
 
   packChocolateProduct(chocolateProductToPack: ChocolateProduct) {
-    chocolateProductToPack.packIt();
+    if (this.isWorkStateWorking()) {
+      chocolateProductToPack.packIt();
+    }
   }
 
   unpackChocolateProduct(chocolateProductToUnpack: ChocolateProduct) {
-    chocolateProductToUnpack.unpackIt();
+    if (this.isWorkStateWorking()) {
+      chocolateProductToUnpack.unpackIt();
+    }
+  }
+
+  getPayment(payment: number) {
+    this.payment += payment;
+  }
+
+  reduceFromPayment(price: number) {
+    this.payment -= price;
+  }
+
+  payForStolenProductsThatEmployeeFoundAbout(numberOfStolenGoods: number, priceOfOneStolenProduct: number) {
+    let priceToPay = numberOfStolenGoods * priceOfOneStolenProduct;
+    this.reduceFromPayment(priceToPay);
+    return priceToPay;
   }
 }

@@ -5,7 +5,7 @@ import { FormatString } from "./.bin/string-manipulation/string-manipulation";
 import { ChocolateMaterialList } from "./models/chocolate-materials/chocolate-material-list";
 import { ChocolateMaterial, ChocolateMaterialType } from "./models/chocolate-materials/chocolate-material";
 import { PalletJack } from "./models/factory-machines/pallet-jack/pallet-jack";
-import { ChocolateProduct } from "./models/chocolate-products/chocolate-product";
+import { ChocolateProduct, ChocolateProductType } from "./models/chocolate-products/chocolate-product";
 
 console.log("hello");
 
@@ -18,15 +18,17 @@ let chocolateMaterial1: ChocolateMaterial = new ChocolateMaterial(ChocolateMater
 let chocolateMaterial2: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.DarkChocolateMaterial);
 let chocolateMaterial3: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.RubyChocolateMaterial);
 let chocolateMaterial4: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.MilkChocolateMaterial);
-let chocolateMaterial5: ChocolateMaterial = new ChocolateMaterial(ChocolateMaterialType.DarkChocolateMaterial);
+let chocolateProduct: ChocolateProduct = new ChocolateProduct(ChocolateProductType.DarkChocolate);
 truck.setCargoStateToChocolateMaterialLoading();
 truck.setStateToIsBeingLoaded();
 
+debugger;
 truck.workWithCargoOnce(chocolateMaterial1);
 truck.workWithCargoOnce(chocolateMaterial2);
 truck.workWithCargoOnce(chocolateMaterial3);
 truck.workWithCargoOnce(chocolateMaterial4);
-truck.workWithCargoOnce(chocolateMaterial5);
+truck.setCargoStateToChocolateProductLoading();
+truck.workWithCargoOnce(null, chocolateProduct);
 console.log(truck);
 palletJack.setCargoStateToChocolateMaterialLoading();
 palletJack.setStateToIsBeingLoaded();
@@ -35,7 +37,7 @@ palletJack.workWithCargoOnce(chocolateMaterial1);
 palletJack.workWithCargoOnce(chocolateMaterial2);
 palletJack.workWithCargoOnce(chocolateMaterial3);
 palletJack.workWithCargoOnce(chocolateMaterial4);
-palletJack.workWithCargoOnce(chocolateMaterial5);
+palletJack.workWithCargoOnce(null, chocolateProduct);
 console.log(palletJack);
 palletJack.setCargoStateToChocolateMaterialUnLoading();
 palletJack.setStateToIsBeingUnloaded();
@@ -48,3 +50,9 @@ console.log(palletJack);
 console.log(truck);
 
 console.log(FormatString(truck.cargoWorkState, " ", true));
+
+console.log(truck.getCurrentFuelTankLevel());
+console.log(truck.cargoCurrentlyOccupiedSpace());
+truck.setCargoStateToChocolateProductUnloading();
+truck.setStateToIsBeingUnloaded();
+console.log(truck.workWithCargoOnce(null, null, null, ChocolateProductType.DarkChocolate));

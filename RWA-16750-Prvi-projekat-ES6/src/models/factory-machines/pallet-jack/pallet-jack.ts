@@ -4,7 +4,7 @@ import { ChocolateMaterialList } from "../../chocolate-materials/chocolate-mater
 import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
 import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
 
-export enum PalletJackState {
+enum PalletJackState {
   Avaible = "Avaible",
   Broken = "Broken",
   InRepair = "InRepair",
@@ -12,7 +12,7 @@ export enum PalletJackState {
   IsBeingUnloaded = "IsBeingUnloaded",
 }
 
-export enum PalletJackCargoWorkState {
+enum PalletJackCargoWorkState {
   ChocolateMaterialLoading = "ChocolateMaterialLoading",
   ChocolateMaterialUnloading = "ChocolateMaterialUnloading",
   ChocolateProductLoading = "ChocolateProductLoading",
@@ -20,6 +20,7 @@ export enum PalletJackCargoWorkState {
 }
 
 export class PalletJack {
+  id: number;
   driver: Employee;
   materialCargo: ChocolateMaterialList;
   productCargo: ChocolateProductList;
@@ -28,12 +29,21 @@ export class PalletJack {
   cargoWorkState: PalletJackCargoWorkState;
 
   constructor(driver: Employee, cargoMaxCapacity: number = 400) {
+    id: undefined;
     this.driver = driver;
     this.cargoMaxCapacity = cargoMaxCapacity;
     this.materialCargo = new ChocolateMaterialList();
     this.productCargo = new ChocolateProductList();
     this.state = PalletJackState.Avaible;
     this.cargoWorkState = PalletJackCargoWorkState.ChocolateMaterialLoading;
+  }
+
+  setId(id: number) {
+    this.id = id;
+  }
+
+  getId() {
+    return this.id;
   }
 
   setDriver(driver: Employee) {
