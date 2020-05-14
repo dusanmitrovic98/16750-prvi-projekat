@@ -120,12 +120,12 @@ export class Warehouse {
 
   removeOneMaterial(chocolateMaterialType: ChocolateMaterialType) {
     this.materialStorage.setStateToMaterialRemoval();
-    this.materialStorage.workWithStorageOnce(null, chocolateMaterialType);
+    return this.materialStorage.workWithStorageOnce(null, chocolateMaterialType);
   }
 
   removeOneProduct(chocolateProductType: ChocolateProductType) {
     this.productStorage.setStateToProductRemoval();
-    this.productStorage.workWithStorageOnce(null, chocolateProductType);
+    return this.productStorage.workWithStorageOnce(null, chocolateProductType);
   }
 
   workWithStorageOnce(

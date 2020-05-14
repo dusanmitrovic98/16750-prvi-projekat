@@ -27,7 +27,7 @@ export enum EmployeerMoodState {
   Devastated = "Devastated",
 }
 
-export class Empolyeer extends Person {
+export class Employeer extends Person {
   employeerState: EmployeerState;
   employeerWorkState: EmployeerWorkState;
   employeerMoodState: EmployeerMoodState;
