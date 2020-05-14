@@ -5,6 +5,7 @@ import { Employee } from "../../people/employee/employee";
 import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
 import { PaymentManagement } from "../../payment-management.ts/payment-management";
 import { ProductStorage } from "../../warehouse/product-storage";
+import { EmployeeList } from "../../people/employee/employee-list";
 
 enum ProductionSectorState {
   WaitingForActivity = "WaitingForActivity",
@@ -16,6 +17,7 @@ enum ProductionSectorState {
 export class ProductionSector {
   id: number;
   factory: ChocolateFactory;
+  employees: EmployeeList;
   preparedMaterialsStorage: MaterialStorage;
   producedProductsStorage: ProductStorage;
   state: ProductionSectorState;
@@ -24,6 +26,7 @@ export class ProductionSector {
   constructor(factory: ChocolateFactory, materialStorageMaximumCapacity: number = 1500) {
     this.id = undefined;
     this.factory = factory;
+    this.employees = new EmployeeList();
     this.preparedMaterialsStorage = new MaterialStorage(materialStorageMaximumCapacity);
     this.producedProductsStorage = new ProductStorage(materialStorageMaximumCapacity);
     this.state = ProductionSectorState.WaitingForActivity;

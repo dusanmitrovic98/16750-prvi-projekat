@@ -1,19 +1,3 @@
-/**
- * Add:
- * -Repair time!
- * randomDelay(1000, 5000)
- *
- *
- * --------------
- *
- *
- *
- * dok se puni radnik je na pauzi
- *
- *
- *
- * check multiple loading unloading
- */
 import { Employee } from "../../people/employee/employee";
 import { Vehicle } from "../vehicle/vehicle";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";

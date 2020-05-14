@@ -1,14 +1,9 @@
-/**
- *  nakon jela proizvodnja par sekundi brza
- * produce product but remove material from list of materials
- */
-
 import { Person } from "../person/person";
 import { FactorySector } from "../../chocolate-factory/chocolate-factory";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
 import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
 import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
-import { Empolyeer } from "../employeer/employeer";
+import { Employeer } from "../employeer/employeer";
 import { getRandomIntInclusive, getRandomProductType } from "../../../.bin/random-numbers/random-numbers";
 import { ProductStorage } from "../../warehouse/product-storage";
 
@@ -31,7 +26,7 @@ enum EmployeeWorkState {
 }
 
 export class Employee extends Person {
-  factoryEmployeer: Empolyeer;
+  factoryEmployeer: Employeer;
   factorySector: FactorySector;
   producedChocolateGoods: ChocolateProductList;
   workState: EmployeeWorkState;
@@ -40,7 +35,7 @@ export class Employee extends Person {
   stateOfHunger: StateOfHunger;
   payment: number;
 
-  constructor(name: string, lastName: string, factoryEmployeer: Empolyeer, drivingLicence: boolean = false) {
+  constructor(name: string, lastName: string, factoryEmployeer: Employeer, drivingLicence: boolean = false) {
     super(name, lastName, drivingLicence);
     this.factoryEmployeer = factoryEmployeer;
     this.producedChocolateGoods = new ChocolateProductList();
@@ -192,6 +187,10 @@ export class Employee extends Person {
     return (producedChocolateProduct = null);
   }
 
+  produceChocolate(chocolateMaterial: ChocolateMaterial) {
+    this.producedChocolateGoods.addProductToList(this.produceChocolateProduct(chocolateMaterial));
+  }
+
   produceDarkChocolateProduct() {
     let newChocolateProduct = new ChocolateProduct();
     if (this.isWorkStateWorking()) {
@@ -221,7 +220,7 @@ export class Employee extends Person {
   packChocolateProduct(chocolateProductToPack: ChocolateProduct) {
     let packedChocolateProduct: ChocolateProduct;
     if (this.isWorkStateWorking()) {
-      chocolateProductToPack.packIt();
+      chocolateProductToPack.setPackedStateToPacked();
       packedChocolateProduct = chocolateProductToPack;
     }
     return packedChocolateProduct;
