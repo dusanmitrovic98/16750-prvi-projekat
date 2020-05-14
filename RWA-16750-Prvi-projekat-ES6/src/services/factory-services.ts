@@ -1,16 +1,16 @@
-import { from, Observable } from "rxjs";
-import { ChocolateFactory } from "../models/chocolate-factory/chocolate-factory";
-import { Employee } from "../models/people/employee/employee";
 import { ProcurementSector } from "../models/chocolate-factory/factory-sectors/procurement-sector";
 import { PreparationSector } from "../models/chocolate-factory/factory-sectors/preparation-sector";
 import { ProductionSector } from "../models/chocolate-factory/factory-sectors/production-sector";
 import { PackingSector } from "../models/chocolate-factory/factory-sectors/packing-sector";
 import { DeliverySector } from "../models/chocolate-factory/factory-sectors/delivery-sector";
+import { ChocolateFactory } from "../models/chocolate-factory/chocolate-factory";
+import { Employee } from "../models/people/employee/employee";
 import { Truck } from "../models/transport/truck/truck";
 import { PalletJack } from "../models/factory-machines/pallet-jack/pallet-jack";
 import { Warehouse } from "../models/warehouse/warehouse";
 import { PrivateChocolateStore } from "../models/private-store/private-chocolate-store";
 import { Employeer } from "../models/people/employeer/employeer";
+import { from, Observable } from "rxjs";
 
 const URL_FETCH = "http://localhost:3000/";
 const URL_FETCH_FACTORY = "http://localhost:3000/factory/";

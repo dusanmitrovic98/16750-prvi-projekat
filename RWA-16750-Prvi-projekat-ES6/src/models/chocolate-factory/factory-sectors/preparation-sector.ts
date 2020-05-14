@@ -1,7 +1,6 @@
 import { ChocolateFactory } from "../chocolate-factory";
 import { MaterialStorage } from "../../warehouse/material-storage";
 import { ChocolateMaterial, ChocolateMaterialType } from "../../chocolate-materials/chocolate-material";
-import { Observable } from "rxjs";
 import { EmployeeList } from "../../people/employee/employee-list";
 import { Employee } from "../../people/employee/employee";
 import { PaymentManagement } from "../../payment-management.ts/payment-management";

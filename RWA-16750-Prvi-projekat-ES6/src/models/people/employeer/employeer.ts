@@ -1,11 +1,6 @@
-/**
- * sto vise vremena prolazi postaje umoran
- */
 import { Person } from "../person/person";
-import { Employee } from "../employee/employee";
 import { getRandomIntInclusive } from "../../../.bin/random-numbers/random-numbers";
-import { interval, timer } from "rxjs";
-import { take } from "rxjs/operators";
+import { timer } from "rxjs";
 
 export enum EmployeerState {
   Working = "Working",
@@ -169,13 +164,6 @@ export class Employeer extends Person {
     }
     if (randomMoodState <= 20 && randomMoodState > 0) {
       this.setMoodStateToDevastated();
-    }
-  }
-
-  decidedToChackOnTheEmployees() {}
-
-  checkForStolenGoods(employee: Employee) {
-    if (this.isStateWorking()) {
     }
   }
 }

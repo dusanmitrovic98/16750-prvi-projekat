@@ -1,8 +1,3 @@
-/**
- *  nakon jela proizvodnja par sekundi brza
- * produce product but remove material from list of materials
- */
-
 import { Person } from "../person/person";
 import { FactorySector } from "../../chocolate-factory/chocolate-factory";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";

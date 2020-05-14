@@ -5,7 +5,6 @@ import { DeliverySector } from "./factory-sectors/delivery-sector";
 import { ProcurementSector } from "./factory-sectors/procurement-sector";
 import { PackingSector } from "./factory-sectors/packing-sector";
 import { Employeer } from "../people/employeer/employeer";
-import { Observable } from "rxjs";
 import { Employee } from "../people/employee/employee";
 
 export enum FactorySector {

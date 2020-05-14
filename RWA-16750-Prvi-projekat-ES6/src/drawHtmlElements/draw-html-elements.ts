@@ -1,16 +1,11 @@
+import { ChocolateProduct } from "../models/chocolate-products/chocolate-product";
+import { ChocolateMaterial } from "../models/chocolate-materials/chocolate-material";
+import { getEmployeerObservable } from "../services/factory-services";
 import { drawHtmlElement } from "./draw-html-element/draw-html-element";
-import { Observable } from "rxjs";
 import { Employee } from "../models/people/employee/employee";
-import { getEmployeeById, getEmployeeObservable, getEmployeerObservable } from "../services/factory-services";
 import { FormatString } from "../.bin/string-manipulation/string-manipulation";
 import { Employeer } from "../models/people/employeer/employeer";
-import { ChocolateProduct, ChocolateProductType } from "../models/chocolate-products/chocolate-product";
-import { ChocolateMaterial } from "../models/chocolate-materials/chocolate-material";
-import { ChocolateFactory } from "../models/chocolate-factory/chocolate-factory";
-import { PalletJack } from "../models/factory-machines/pallet-jack/pallet-jack";
-import { Truck } from "../models/transport/truck/truck";
-import { Warehouse } from "../models/warehouse/warehouse";
-import { PrivateChocolateStore } from "../models/private-store/private-chocolate-store";
+import { Observable } from "rxjs";
 
 export class DrawHtmlElements {
   employee: Employee;
