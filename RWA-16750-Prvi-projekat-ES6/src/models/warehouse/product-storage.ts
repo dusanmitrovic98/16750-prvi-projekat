@@ -167,7 +167,7 @@ export class ProductStorage {
     return null;
   }
 
-  workWithStorageOnce(newProduct?: ChocolateProduct, chocolateProductType?: ChocolateProductType) {
+  workWithStorageOnce(newProduct: ChocolateProduct, chocolateProductType?: ChocolateProductType) {
     if (this.isStateProductStoring() && newProduct != null) {
       this.storeOneProductToStorage(newProduct);
     }

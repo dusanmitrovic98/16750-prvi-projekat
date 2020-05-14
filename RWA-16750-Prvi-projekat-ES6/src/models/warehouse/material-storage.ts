@@ -167,7 +167,7 @@ export class MaterialStorage {
     return null;
   }
 
-  workWithStorageOnce(newMaterial?: ChocolateMaterial, chocolateMaterialType?: ChocolateMaterialType) {
+  workWithStorageOnce(newMaterial: ChocolateMaterial, chocolateMaterialType?: ChocolateMaterialType) {
     if (this.isStateMaterialStoring() && newMaterial != null) {
       this.storeOneMaterialToStorage(newMaterial);
     }

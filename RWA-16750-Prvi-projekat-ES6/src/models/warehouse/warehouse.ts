@@ -129,7 +129,7 @@ export class Warehouse {
   }
 
   workWithStorageOnce(
-    newMaterial?: ChocolateMaterial,
+    newMaterial: ChocolateMaterial,
     newProduct?: ChocolateProduct,
     chocolateMaterialType?: ChocolateMaterialType,
     chocolateProductType?: ChocolateProductType

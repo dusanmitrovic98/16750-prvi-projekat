@@ -853,7 +853,8 @@
             3,
             4,
             5
-        ]
+        ],
+        "materialStorageMaximumCapacity": 1500
     }],
     "preparationSector": [{
         "id": 2,
@@ -870,7 +871,8 @@
             13,
             14,
             15
-        ]
+        ],
+        "materialStorageMaximumCapacity": 1500
     }],
     "productionSector": [{
         "id": 3,
@@ -914,7 +916,8 @@
             43,
             44,
             45
-        ]
+        ],
+        "materialStorageMaximumCapacity": 1500
     }],
     "deliverySector": [{
         "id": 5,
@@ -926,7 +929,8 @@
             48,
             49,
             50
-        ]
+        ],
+        "productStorageMaximumCapacity": 1500
     }],
     "trucks": [{
             "id": 1,
