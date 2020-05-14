@@ -3,6 +3,9 @@
  */
 import { Person } from "../person/person";
 import { Employee } from "../employee/employee";
+import { getRandomIntInclusive } from "../../../.bin/random-numbers/random-numbers";
+import { interval, timer } from "rxjs";
+import { take } from "rxjs/operators";
 
 export enum EmployeerState {
   Working = "Working",
@@ -11,29 +14,31 @@ export enum EmployeerState {
 }
 
 export enum EmployeerWorkState {
-  MaximumWorkDedicationTireless = "Tireless", //100%
-  MediumWorkDedicationFeelingTired = "FeelingTired", //50%
-  LowWorkDedicationTired = "Tired", //25%
+  MaximumWorkDedicationTireless = "Tireless",
+  MediumWorkDedicationFeelingTired = "FeelingTired",
+  LowWorkDedicationTired = "Tired",
 }
 
 export enum EmployeerMoodState {
-  Exelent = "Exelent", //0%
-  VeryGood = "VeryGood", //25%
-  Good = "Good", //50%
-  Stressed = "Stressed", //75%
-  Devastated = "Devastated", //100%
+  Exelent = "Exelent",
+  VeryGood = "VeryGood",
+  Good = "Good",
+  Stressed = "Stressed",
+  Devastated = "Devastated",
 }
 
 export class Empolyeer extends Person {
   employeerState: EmployeerState;
   employeerWorkState: EmployeerWorkState;
   employeerMoodState: EmployeerMoodState;
+  workStateLevel: number;
 
   constructor(name: string, lastName: string, drivingLicence: boolean = false) {
     super(name, lastName, drivingLicence);
     this.employeerState = EmployeerState.NotPresent;
     this.employeerWorkState = EmployeerWorkState.MaximumWorkDedicationTireless;
     this.employeerMoodState = EmployeerMoodState.Exelent;
+    this.workStateLevel = 0;
   }
 
   setStateToWorking() {
@@ -123,6 +128,51 @@ export class Empolyeer extends Person {
   isMoodStateToDevastated() {
     this.employeerMoodState = EmployeerMoodState.Devastated;
   }
+
+  rest(seconds: number) {
+    console.log("rest started!");
+    const source = timer(seconds * 1000);
+    const subscribe = source.subscribe((val) => {
+      this.workStateLevel = 0;
+      console.log(`${this.name} has rested for ${seconds} seconds!`);
+    });
+  }
+
+  changeWorkState() {
+    if (this.workStateLevel > 100) {
+      this.rest(10);
+    }
+    if (this.workStateLevel <= 100 && this.workStateLevel > 70) {
+      this.setWorkStateToLowWorkDedicationTired();
+    }
+    if (this.workStateLevel <= 70 && this.workStateLevel > 40) {
+      this.setWorkStateToMediumWorkDedicationFeelingTired();
+    }
+    if (this.workStateLevel <= 40 && this.workStateLevel > 0) {
+      this.setWorkStateToMaximumWorkDedicationTireless();
+    }
+  }
+
+  changeMoodState() {
+    let randomMoodState: number = getRandomIntInclusive(0, 100);
+    if (randomMoodState <= 100 && randomMoodState > 80) {
+      this.setMoodStateToExelent();
+    }
+    if (randomMoodState <= 80 && randomMoodState > 60) {
+      this.setMoodStateToVeryGood();
+    }
+    if (randomMoodState <= 60 && randomMoodState > 40) {
+      this.setMoodStateToGood();
+    }
+    if (randomMoodState <= 40 && randomMoodState > 20) {
+      this.setMoodStateToStressed();
+    }
+    if (randomMoodState <= 20 && randomMoodState > 0) {
+      this.setMoodStateToDevastated();
+    }
+  }
+
+  decidedToChackOnTheEmployees() {}
 
   checkForStolenGoods(employee: Employee) {
     if (this.isStateWorking()) {

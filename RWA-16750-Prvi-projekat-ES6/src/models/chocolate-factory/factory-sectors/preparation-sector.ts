@@ -2,6 +2,9 @@ import { ChocolateFactory } from "../chocolate-factory";
 import { MaterialStorage } from "../../warehouse/material-storage";
 import { ChocolateMaterial, ChocolateMaterialType } from "../../chocolate-materials/chocolate-material";
 import { Observable } from "rxjs";
+import { EmployeeList } from "../../people/employee/employee-list";
+import { Employee } from "../../people/employee/employee";
+import { PaymentManagement } from "../../payment-management.ts/payment-management";
 
 enum PreparationSectorState {
   WaitingForActivity = "WaitingForActivity",
@@ -10,17 +13,23 @@ enum PreparationSectorState {
   ForwardsPreparedMaterialsToTheProductionSector = "ForwardsMaterialsToThePreparationSector",
 }
 
-export class ProcurementSector {
+export class PreparationSector {
+  id: number;
   factory: ChocolateFactory;
   unpreparedMaterialsStorage: MaterialStorage;
   preparedMaterialsStorage: MaterialStorage;
   state: PreparationSectorState;
+  employees: EmployeeList;
+  paymentManagement: PaymentManagement;
 
   constructor(factory: ChocolateFactory, materialStorageMaximumCapacity: number = 1500) {
+    this.id = undefined;
     this.factory = factory;
     this.unpreparedMaterialsStorage = new MaterialStorage(materialStorageMaximumCapacity);
     this.preparedMaterialsStorage = new MaterialStorage(materialStorageMaximumCapacity);
     this.state = PreparationSectorState.WaitingForActivity;
+    this.employees = new EmployeeList();
+    this.paymentManagement = new PaymentManagement();
   }
 
   setStateToWaitingForActivity() {
@@ -88,7 +97,7 @@ export class ProcurementSector {
   }
 
   workWithPreparedMaterialStorageOnce(
-    newPreparedMaterial?: ChocolateMaterial,
+    newPreparedMaterial: ChocolateMaterial,
     preparedChocolateMaterialType?: ChocolateMaterialType
   ) {
     if (this.isStatePreparingUnpreparedMaterials()) {
@@ -99,10 +108,16 @@ export class ProcurementSector {
     }
   }
 
-  preparingOneUnpreparedMaterial(chocolateMaterialType: ChocolateMaterialType) {
-    let unpreparedMaterial: ChocolateMaterial;
+  preparingOneUnpreparedMaterial(chocolateMaterialType: ChocolateMaterialType, employee: Employee) {
+    let unpreparedMaterial: ChocolateMaterial, preparedMaterial: ChocolateMaterial;
     unpreparedMaterial = this.workWithUnpreparedMaterialStorageOnce(null, chocolateMaterialType);
-    unpreparedMaterial.setProductionStateToReadyForProduction();
-    this.workWithPreparedMaterialStorageOnce(unpreparedMaterial);
+    preparedMaterial = employee.prepareProduct(unpreparedMaterial);
+    this.payEmployeeForPreparedChocolateMaterial(employee, chocolateMaterialType);
+    this.workWithPreparedMaterialStorageOnce(preparedMaterial);
+  }
+
+  payEmployeeForPreparedChocolateMaterial(employee: Employee, preparedChocolateMaterialType: ChocolateMaterialType) {
+    let payment = this.paymentManagement.getEmployeePaymentPerMaterialType(preparedChocolateMaterialType);
+    employee.getPayment(payment);
   }
 }

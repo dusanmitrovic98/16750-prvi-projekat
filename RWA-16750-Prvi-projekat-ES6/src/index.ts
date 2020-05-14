@@ -6,6 +6,24 @@ import { ChocolateMaterialList } from "./models/chocolate-materials/chocolate-ma
 import { ChocolateMaterial, ChocolateMaterialType } from "./models/chocolate-materials/chocolate-material";
 import { PalletJack } from "./models/factory-machines/pallet-jack/pallet-jack";
 import { ChocolateProduct, ChocolateProductType } from "./models/chocolate-products/chocolate-product";
+import { getRandomIntInclusive } from "./.bin/random-numbers/random-numbers";
+import { interval, fromEvent, timer, Observable, Subject, forkJoin, from, observable, pipe, of } from "rxjs";
+import {
+  takeUntil,
+  take,
+  map,
+  pairwise,
+  filter,
+  scan,
+  sampleTime,
+  tap,
+  debounceTime,
+  delay,
+  repeat,
+} from "rxjs/operators";
+import { drawHtmlElement } from "./drawHtmlElements/draw-html-element/draw-html-element";
+import { getEmployeeById, getFactoryById, getFactoryObservable } from "./services/factory-services";
+import { ChocolateFactory } from "./models/chocolate-factory/chocolate-factory";
 
 console.log("hello");
 
@@ -22,7 +40,6 @@ let chocolateProduct: ChocolateProduct = new ChocolateProduct(ChocolateProductTy
 truck.setCargoStateToChocolateMaterialLoading();
 truck.setStateToIsBeingLoaded();
 
-debugger;
 truck.workWithCargoOnce(chocolateMaterial1);
 truck.workWithCargoOnce(chocolateMaterial2);
 truck.workWithCargoOnce(chocolateMaterial3);
@@ -56,3 +73,35 @@ console.log(truck.cargoCurrentlyOccupiedSpace());
 truck.setCargoStateToChocolateProductUnloading();
 truck.setStateToIsBeingUnloaded();
 console.log(truck.workWithCargoOnce(null, null, null, ChocolateProductType.DarkChocolate));
+console.log(getRandomIntInclusive(1000, 5000));
+
+let Milos = new Empolyeer("Milos", "Mitrovic");
+
+console.log(Milos.employeerWorkState);
+
+Milos.changeWorkState();
+
+console.log(Milos.employeerWorkState);
+/*
+const source = interval(1000);
+const clicks = fromEvent(document, "click");
+const result = source.pipe(takeUntil(clicks));
+result.subscribe((x) => console.log(x));
+
+const intervalCount = interval(1000);
+const takeFive = intervalCount.pipe(take(5));
+takeFive.subscribe((x) => console.log(x));
+*/
+console.clear();
+
+let factoryObservable = getFactoryObservable(1);
+factoryObservable.subscribe((factory: ChocolateFactory) => console.log(factory.name));
+
+const delayedThing = of(Milos).pipe(delay(2000));
+delayedThing
+  .pipe(repeat(3))
+  // delayed value...delayed value...delayed value
+  .subscribe((v) => {
+    v.setWorkStateToMediumWorkDedicationFeelingTired();
+    console.log(v.employeerWorkState);
+  });

@@ -1,6 +1,10 @@
 import { ChocolateFactory } from "../chocolate-factory";
 import { MaterialStorage } from "../../warehouse/material-storage";
 import { ChocolateMaterial, ChocolateMaterialType } from "../../chocolate-materials/chocolate-material";
+import { Employee } from "../../people/employee/employee";
+import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
+import { PaymentManagement } from "../../payment-management.ts/payment-management";
+import { ProductStorage } from "../../warehouse/product-storage";
 
 enum ProductionSectorState {
   WaitingForActivity = "WaitingForActivity",
@@ -10,16 +14,20 @@ enum ProductionSectorState {
 }
 
 export class ProductionSector {
+  id: number;
   factory: ChocolateFactory;
   preparedMaterialsStorage: MaterialStorage;
-  producedProductsStorage: MaterialStorage;
+  producedProductsStorage: ProductStorage;
   state: ProductionSectorState;
+  paymentManagement: PaymentManagement;
 
   constructor(factory: ChocolateFactory, materialStorageMaximumCapacity: number = 1500) {
+    this.id = undefined;
     this.factory = factory;
     this.preparedMaterialsStorage = new MaterialStorage(materialStorageMaximumCapacity);
-    this.preparedMaterialsStorage = new MaterialStorage(materialStorageMaximumCapacity);
+    this.producedProductsStorage = new ProductStorage(materialStorageMaximumCapacity);
     this.state = ProductionSectorState.WaitingForActivity;
+    this.paymentManagement = new PaymentManagement();
   }
 
   setStateToWaitingForActivity() {
@@ -76,19 +84,19 @@ export class ProductionSector {
     }
   }
 
-  storeOneProducedProductToStorage(producedProductChocolate: ChocolateMaterial) {
-    this.producedProductsStorage.setStateToMaterialStoring();
+  storeOneProducedProductToStorage(producedProductChocolate: ChocolateProduct) {
+    this.producedProductsStorage.setStateToProductStoring();
     this.producedProductsStorage.workWithStorageOnce(producedProductChocolate);
   }
 
-  getOneProducedProductFromStorage(producedProductChocolateType: ChocolateMaterialType) {
-    this.producedProductsStorage.setStateToMaterialRemoval();
+  getOneProducedProductFromStorage(producedProductChocolateType: ChocolateProductType) {
+    this.producedProductsStorage.setStateToProductRemoval();
     return this.producedProductsStorage.workWithStorageOnce(null, producedProductChocolateType);
   }
 
-  workWithproducedProductStorageOnce(
-    newProducedChocolateProduct?: ChocolateMaterial,
-    producedProductChocolateType?: ChocolateMaterialType
+  workWithProducedProductStorageOnce(
+    newProducedChocolateProduct: ChocolateProduct,
+    producedProductChocolateType?: ChocolateProductType
   ) {
     if (this.isStateProductProduction() && newProducedChocolateProduct != null) {
       this.storeOneProducedProductToStorage(newProducedChocolateProduct);
@@ -98,10 +106,17 @@ export class ProductionSector {
     }
   }
 
-  produceOneProduct(chocolateMaterialType: ChocolateMaterialType) {
-    let unpreparedMaterial: ChocolateMaterial;
-    unpreparedMaterial = this.workWithPreparedMaterialStorageOnce(null, chocolateMaterialType);
-    unpreparedMaterial.setProductionStateToReadyForProduction();
-    this.workWithPreparedMaterialStorageOnce(unpreparedMaterial);
+  produceOneProduct(chocolateMaterialType: ChocolateMaterialType, employee: Employee) {
+    let preparedMaterial: ChocolateMaterial;
+    let producedProduct: ChocolateProduct;
+    preparedMaterial = this.workWithPreparedMaterialStorageOnce(null, chocolateMaterialType);
+    producedProduct = employee.produceChocolateProduct(preparedMaterial);
+    this.payEmployeeForProducedChocolateProduct(employee, producedProduct);
+    this.workWithProducedProductStorageOnce(producedProduct);
+  }
+
+  payEmployeeForProducedChocolateProduct(employee: Employee, producedChocolateProduct: ChocolateProduct) {
+    let payment = this.paymentManagement.getEmployeePaymentPerProduct(producedChocolateProduct);
+    employee.getPayment(payment);
   }
 }

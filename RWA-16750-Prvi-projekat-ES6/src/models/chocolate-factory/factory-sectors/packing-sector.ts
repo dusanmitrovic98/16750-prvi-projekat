@@ -1,6 +1,9 @@
-import { ChocolateFactory } from "../chocolate-factory";
-import { ProductStorage } from "../../warehouse/product-storage";
 import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
+import { PaymentManagement } from "../../payment-management.ts/payment-management";
+import { ProductStorage } from "../../warehouse/product-storage";
+import { ChocolateFactory } from "../chocolate-factory";
+import { EmployeeList } from "../../people/employee/employee-list";
+import { Employee } from "../../people/employee/employee";
 
 enum PackingSectorState {
   WaitingForActivity = "WaitingForActivity",
@@ -9,17 +12,23 @@ enum PackingSectorState {
   ForwardsProducedProductsToTheDeliverySector = "ForwardsProducedProductsToTheDeliverySector",
 }
 
-export class ProcurementSector {
+export class PackingSector {
+  id: number;
   factory: ChocolateFactory;
   unpackedProductsStorage: ProductStorage;
   packedProductsStorage: ProductStorage;
   state: PackingSectorState;
+  paymentManagement: PaymentManagement;
+  employees: EmployeeList;
 
   constructor(factory: ChocolateFactory, productsStorageMaximumCapacity: number = 1500) {
+    this.id = undefined;
     this.factory = factory;
     this.unpackedProductsStorage = new ProductStorage(productsStorageMaximumCapacity);
     this.packedProductsStorage = new ProductStorage(productsStorageMaximumCapacity);
     this.state = PackingSectorState.WaitingForActivity;
+    this.paymentManagement = new PaymentManagement();
+    this.employees = new EmployeeList();
   }
 
   setStateToWaitingForActivity() {
@@ -87,7 +96,7 @@ export class ProcurementSector {
   }
 
   workWithPackedProductsStorageOnce(
-    newPackedChocolateProduct?: ChocolateProduct,
+    newPackedChocolateProduct: ChocolateProduct,
     packedChocolateProductType?: ChocolateProductType
   ) {
     if (this.isStateProductPacking() && newPackedChocolateProduct != null) {
@@ -98,10 +107,15 @@ export class ProcurementSector {
     }
   }
 
-  packingOneUnpackedProduct(unpackedChocolateMaterialType: ChocolateProductType) {
-    let unpackedProduct: ChocolateProduct;
+  packingOneUnpackedProduct(unpackedChocolateMaterialType: ChocolateProductType, employee: Employee) {
+    let unpackedProduct: ChocolateProduct, packedProduct: ChocolateProduct;
     unpackedProduct = this.workWithUnpreparedProductsStorageOnce(null, unpackedChocolateMaterialType);
-    unpackedProduct.packIt();
-    this.workWithPackedProductsStorageOnce(unpackedProduct);
+    packedProduct = employee.packChocolateProduct(unpackedProduct);
+    this.workWithPackedProductsStorageOnce(packedProduct);
+  }
+
+  payEmployeeForSoldChocolate(employee: Employee, packedChocolate: ChocolateProduct) {
+    let payment = this.paymentManagement.getEmployeePaymentPerProduct(packedChocolate);
+    employee.getPayment(payment);
   }
 }
