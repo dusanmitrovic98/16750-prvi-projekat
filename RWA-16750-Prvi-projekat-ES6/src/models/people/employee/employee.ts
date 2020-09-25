@@ -2,10 +2,11 @@ import { Person } from "../person/person";
 import { FactorySector } from "../../chocolate-factory/chocolate-factory";
 import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
 import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
-import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
+import { ChocolateProduct, ChocolateProductType } from "../../chocolate-products/chocolate-product";
 import { Employeer } from "../employeer/employeer";
-import { getRandomIntInclusive, getRandomProductType } from "../../../.bin/random-numbers/random-numbers";
+import { getRandomIntInclusive, getRandomProductType } from "../../../helpers/random-numbers/random-numbers";
 import { ProductStorage } from "../../warehouse/product-storage";
+import { FormatString } from "../../../helpers/string-manipulation/string-manipulation";
 
 enum EmployeeGreedLevel {
   High = "High",
@@ -68,13 +69,13 @@ export class Employee extends Person {
 
   changeStateOfHunger() {
     let stateOfHunger: number = getRandomIntInclusive(25, 100);
-    if (stateOfHunger <= 100 && stateOfHunger > 75) {
+    if (stateOfHunger <= 100 && stateOfHunger > 97) {
       this.setStateOfHungerToHigh();
     }
-    if (stateOfHunger <= 75 && stateOfHunger > 50) {
+    if (stateOfHunger <= 97 && stateOfHunger > 95) {
       this.setStateOfHungerToMedium();
     }
-    if (stateOfHunger <= 50 && stateOfHunger >= 25) {
+    if (stateOfHunger <= 95 && stateOfHunger >= 25) {
       this.setStateOfHungerToLow();
     }
   }
@@ -109,13 +110,13 @@ export class Employee extends Person {
 
   changeGreedLevel() {
     let greedLevel: number = getRandomIntInclusive(25, 100);
-    if (greedLevel <= 100 && greedLevel > 75) {
+    if (greedLevel <= 100 && greedLevel > 97) {
       this.setGreedLevelToHigh();
     }
-    if (greedLevel <= 75 && greedLevel > 50) {
+    if (greedLevel <= 97 && greedLevel > 95) {
       this.setGreedLevelToMedium();
     }
-    if (greedLevel <= 50 && greedLevel >= 25) {
+    if (greedLevel <= 95 && greedLevel >= 25) {
       this.setGreedLevelToLow();
     }
   }
@@ -135,13 +136,23 @@ export class Employee extends Person {
     return false;
   }
 
-  stealProduct(chocolateProductStorage: ProductStorage) {
+  stealProduct(chocolateProductStorage: ProductStorage, index: number) {
     let stolenProduct: ChocolateProduct;
     if (this.decidedToSteal()) {
       chocolateProductStorage.setStateToProductRemoval();
-      stolenProduct = chocolateProductStorage.workWithStorageOnce(null, getRandomProductType());
+      let randomProductType: ChocolateProductType = getRandomProductType();
+      stolenProduct = chocolateProductStorage.workWithStorageOnce(null, randomProductType);
       if (stolenProduct != null || stolenProduct != undefined) {
         this.stolenChocolates.addProductToList(stolenProduct);
+        console.log(
+          index + ": " + this.name + " stole one chocolate of type " + FormatString(randomProductType, " ", true) + "!"
+        );
+        if (this.factoryEmployeer.decidedToWarn()) {
+          console.log("Employeer mood state: " + index + " " + this.factoryEmployeer.employeerMoodState);
+          console.log("Employeer work state: " + index + " " + this.factoryEmployeer.employeerWorkState);
+          console.log(index + ": Employeer warned employee!");
+        }
+        return true;
       }
     }
   }

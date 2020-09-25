@@ -6,27 +6,25 @@ import { DeliverySector } from "../models/chocolate-factory/factory-sectors/deli
 import { ChocolateFactory } from "../models/chocolate-factory/chocolate-factory";
 import { Employee } from "../models/people/employee/employee";
 import { Truck } from "../models/transport/truck/truck";
-import { PalletJack } from "../models/factory-machines/pallet-jack/pallet-jack";
+import { PalletJack } from "../models/factory-machines/pallet-jack";
 import { Warehouse } from "../models/warehouse/warehouse";
 import { PrivateChocolateStore } from "../models/private-store/private-chocolate-store";
 import { Employeer } from "../models/people/employeer/employeer";
 import { from, Observable } from "rxjs";
 
 const URL_FETCH = "http://localhost:3000/";
-const URL_FETCH_FACTORY = "http://localhost:3000/factory/";
 const URL_FETCH_FACTORY_BY_ID = "http://localhost:3000/factory?id=";
-const URL_FETCH_EMPLOYEES = "http://localhost:3000/factory/employees/";
-const URL_FETCH_EMPLOYEES_BY_ID = "http://localhost:3000/factory/employees?id=";
-const URL_FETCH_EMPLOYEER_BY_ID = "http://localhost:3000/factory/employeer?id=";
-const URL_FETCH_PROCUREMENT_SECTOR_BY_ID = "http://localhost:3000/factory/procurementSector?id=";
-const URL_FETCH_PREPARATION_SECTOR_BY_ID = "http://localhost:3000/factory/preparationSector?id=";
-const URL_FETCH_PRODUCTION_SECTOR_BY_ID = "http://localhost:3000/factory/productionSector?id=";
-const URL_FETCH_PACKING_SECTOR_BY_ID = "http://localhost:3000/factory/packingSector?id=";
-const URL_FETCH_DELIVERY_SECTOR_BY_ID = "http://localhost:3000/factory/deliverySector?id=";
-const URL_FETCH_TRUCK_BY_ID = "http://localhost:3000/factory/trucks?id=";
-const URL_FETCH_PALLET_JACK_BY_ID = "http://localhost:3000/factory/palletJack?id=";
-const URL_FETCH_WAREHOUSE_BY_ID = "http://localhost:3000/factory/warehouse?id=";
-const URL_FETCH_PRIVATE_CHOCOLATE_STORE_BY_ID = "http://localhost:3000/factory/privateChocolateStore?id=";
+const URL_FETCH_EMPLOYEES_BY_ID = "http://localhost:3000/employees?id=";
+const URL_FETCH_EMPLOYEER_BY_ID = "http://localhost:3000/employeer?id=";
+const URL_FETCH_PROCUREMENT_SECTOR_BY_ID = "http://localhost:3000/procurementSector?id=";
+const URL_FETCH_PREPARATION_SECTOR_BY_ID = "http://localhost:3000/preparationSector?id=";
+const URL_FETCH_PRODUCTION_SECTOR_BY_ID = "http://localhost:3000/productionSector?id=";
+const URL_FETCH_PACKING_SECTOR_BY_ID = "http://localhost:3000/packingSector?id=";
+const URL_FETCH_DELIVERY_SECTOR_BY_ID = "http://localhost:3000/deliverySector?id=";
+const URL_FETCH_TRUCK_BY_ID = "http://localhost:3000/trucks?id=";
+const URL_FETCH_PALLET_JACK_BY_ID = "http://localhost:3000/palletJack?id=";
+const URL_FETCH_WAREHOUSE_BY_ID = "http://localhost:3000/warehouse?id=";
+const URL_FETCH_PRIVATE_CHOCOLATE_STORE_BY_ID = "http://localhost:3000/privateChocolateStore?id=";
 
 export function getEmployee(employeeId: number) {
   return fetch(URL_FETCH_EMPLOYEES_BY_ID + employeeId).then((response) => response.json());
@@ -36,7 +34,7 @@ export function getFactoryById(factoryId: number) {
   return from(fetch(URL_FETCH_FACTORY_BY_ID + factoryId).then((response) => response.json()));
 }
 
-export function getEmployeeById(employeeId: number) {
+export function getEmployeeByIdObservable(employeeId: number) {
   return from(fetch(URL_FETCH_EMPLOYEES_BY_ID + employeeId).then((response) => response.json()));
 }
 
@@ -53,7 +51,7 @@ export function getPreparationSectorById(sectorId: number) {
 }
 
 export function getProductionSectorById(sectorId: number) {
-  return from(fetch(URL_FETCH_DELIVERY_SECTOR_BY_ID + sectorId).then((response) => response.json()));
+  return from(fetch(URL_FETCH_PRODUCTION_SECTOR_BY_ID + sectorId).then((response) => response.json()));
 }
 
 export function getPackingSectorById(sectorId: number) {
@@ -112,7 +110,7 @@ export function getEmployeeObject(employeeId: number) {
 
 export function getEmployeeObservable(employeeId: number) {
   let employeeObservable: Observable<Employee> = Observable.create((observer: any) => {
-    getEmployeeById(employeeId).subscribe((employee: any) => {
+    getEmployeeByIdObservable(employeeId).subscribe((employee: any) => {
       let newEmployee: Employee = new Employee(
         employee[0].name,
         employee[0].lastName,

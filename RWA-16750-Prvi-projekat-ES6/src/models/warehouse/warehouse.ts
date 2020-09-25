@@ -1,5 +1,3 @@
-import { ChocolateMaterialList } from "../chocolate-materials/chocolate-material-list";
-import { ChocolateProductList } from "../chocolate-products/chocolate-product-list";
 import { ChocolateMaterial, ChocolateMaterialType } from "../chocolate-materials/chocolate-material";
 import { ChocolateProduct, ChocolateProductType } from "../chocolate-products/chocolate-product";
 import { MaterialStorage } from "./material-storage";

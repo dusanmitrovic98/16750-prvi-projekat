@@ -116,13 +116,13 @@ export class ProductStorage {
     if (chocolateProduct.isChocolateProductTypeDarkChocolate()) {
       this.storeOneDarkChocolateProductToStorage(chocolateProduct);
     }
-    if (chocolateProduct.isChocolateProductTypeWhiteChocolate) {
+    if (chocolateProduct.isChocolateProductTypeWhiteChocolate()) {
       this.storeOneWhiteChocolateProductToStorage(chocolateProduct);
     }
-    if (chocolateProduct.isChocolateProductTypeMilkChocolate) {
+    if (chocolateProduct.isChocolateProductTypeMilkChocolate()) {
       this.storeOneMilkChocolateProductToStorage(chocolateProduct);
     }
-    if (chocolateProduct.isChocolateProductTypeRubyChocolate) {
+    if (chocolateProduct.isChocolateProductTypeRubyChocolate()) {
       this.storeOneRubyChocolateProductToStorage(chocolateProduct);
     }
   }

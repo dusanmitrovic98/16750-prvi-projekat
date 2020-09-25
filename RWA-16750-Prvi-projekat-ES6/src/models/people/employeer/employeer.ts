@@ -1,5 +1,5 @@
 import { Person } from "../person/person";
-import { getRandomIntInclusive } from "../../../.bin/random-numbers/random-numbers";
+import { getRandomIntInclusive } from "../../../helpers/random-numbers/random-numbers";
 import { timer } from "rxjs";
 
 export enum EmployeerState {
@@ -81,47 +81,47 @@ export class Employeer extends Person {
   }
 
   isWorkStateToLowWorkDedicationTired() {
-    this.employeerWorkState === EmployeerWorkState.LowWorkDedicationTired;
+    return this.employeerWorkState === EmployeerWorkState.LowWorkDedicationTired;
   }
 
   setMoodStateToExelent() {
-    this.employeerMoodState = EmployeerMoodState.Exelent;
+    return (this.employeerMoodState = EmployeerMoodState.Exelent);
   }
 
   setMoodStateToVeryGood() {
-    this.employeerMoodState = EmployeerMoodState.VeryGood;
+    return (this.employeerMoodState = EmployeerMoodState.VeryGood);
   }
 
   setMoodStateToGood() {
-    this.employeerMoodState = EmployeerMoodState.Good;
+    return (this.employeerMoodState = EmployeerMoodState.Good);
   }
 
   setMoodStateToStressed() {
-    this.employeerMoodState = EmployeerMoodState.Stressed;
+    return (this.employeerMoodState = EmployeerMoodState.Stressed);
   }
 
   setMoodStateToDevastated() {
-    this.employeerMoodState = EmployeerMoodState.Devastated;
+    return (this.employeerMoodState = EmployeerMoodState.Devastated);
   }
 
-  isMoodStateToExelent() {
+  isMoodStateExelent() {
     return this.employeerMoodState === EmployeerMoodState.Exelent;
   }
 
-  isMoodStateToVeryGood() {
+  isMoodStateVeryGood() {
     return this.employeerMoodState === EmployeerMoodState.VeryGood;
   }
 
-  isMoodStateToGood() {
+  isMoodStateGood() {
     return this.employeerMoodState === EmployeerMoodState.Good;
   }
 
-  isMoodStateToStressed() {
+  isMoodStateStressed() {
     return this.employeerMoodState === EmployeerMoodState.Stressed;
   }
 
-  isMoodStateToDevastated() {
-    this.employeerMoodState = EmployeerMoodState.Devastated;
+  isMoodStateDevastated() {
+    return this.employeerMoodState === EmployeerMoodState.Devastated;
   }
 
   rest(seconds: number) {
@@ -137,13 +137,13 @@ export class Employeer extends Person {
     if (this.workStateLevel > 100) {
       this.rest(10);
     }
-    if (this.workStateLevel <= 100 && this.workStateLevel > 70) {
+    if (this.workStateLevel <= 100 && this.workStateLevel > 95) {
       this.setWorkStateToLowWorkDedicationTired();
     }
-    if (this.workStateLevel <= 70 && this.workStateLevel > 40) {
+    if (this.workStateLevel <= 95 && this.workStateLevel > 90) {
       this.setWorkStateToMediumWorkDedicationFeelingTired();
     }
-    if (this.workStateLevel <= 40 && this.workStateLevel > 0) {
+    if (this.workStateLevel <= 90 && this.workStateLevel > 0) {
       this.setWorkStateToMaximumWorkDedicationTireless();
     }
   }
@@ -156,14 +156,23 @@ export class Employeer extends Person {
     if (randomMoodState <= 80 && randomMoodState > 60) {
       this.setMoodStateToVeryGood();
     }
-    if (randomMoodState <= 60 && randomMoodState > 40) {
+    if (randomMoodState <= 60 && randomMoodState > 20) {
       this.setMoodStateToGood();
     }
-    if (randomMoodState <= 40 && randomMoodState > 20) {
+    if (randomMoodState <= 20 && randomMoodState > 10) {
       this.setMoodStateToStressed();
     }
-    if (randomMoodState <= 20 && randomMoodState > 0) {
+    if (randomMoodState <= 10 && randomMoodState > 0) {
       this.setMoodStateToDevastated();
     }
+  }
+
+  decidedToWarn() {
+    this.changeMoodState();
+    this.changeWorkState();
+    if (this.isMoodStateDevastated()) {
+      return true;
+    }
+    return false;
   }
 }

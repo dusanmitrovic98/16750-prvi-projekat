@@ -73,7 +73,7 @@ export class PackingSector {
     return this.unpackedProductsStorage.workWithStorageOnce(null, unpackedChocolateProductType);
   }
 
-  workWithUnpreparedProductsStorageOnce(
+  workWithUnpackedProductsStorageOnce(
     newUnpackedChocolateProduct?: ChocolateProduct,
     chocolateProductType?: ChocolateProductType
   ) {
@@ -109,7 +109,7 @@ export class PackingSector {
 
   packingOneUnpackedProduct(unpackedChocolateMaterialType: ChocolateProductType, employee: Employee) {
     let unpackedProduct: ChocolateProduct, packedProduct: ChocolateProduct;
-    unpackedProduct = this.workWithUnpreparedProductsStorageOnce(null, unpackedChocolateMaterialType);
+    unpackedProduct = this.workWithUnpackedProductsStorageOnce(null, unpackedChocolateMaterialType);
     packedProduct = employee.packChocolateProduct(unpackedProduct);
     this.workWithPackedProductsStorageOnce(packedProduct);
   }
