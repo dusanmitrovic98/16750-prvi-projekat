@@ -67,7 +67,7 @@ export class DeliverySector {
     return this.packedProductsStorage.workWithStorageOnce(null, packedChocolateProductType);
   }
 
-  workWithProcurementStorageOnce(
+  workWithDeliveryStorageOnce(
     employee: Employee,
     newPackedChocolateProduct: ChocolateProduct,
     packedChocolateProductType?: ChocolateProductType

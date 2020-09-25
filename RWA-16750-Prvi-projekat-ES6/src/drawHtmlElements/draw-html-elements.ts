@@ -3,7 +3,7 @@ import { ChocolateMaterial } from "../models/chocolate-materials/chocolate-mater
 import { getEmployeerObservable } from "../services/factory-services";
 import { drawHtmlElement } from "./draw-html-element/draw-html-element";
 import { Employee } from "../models/people/employee/employee";
-import { FormatString } from "../.bin/string-manipulation/string-manipulation";
+import { FormatString } from "../helpers/string-manipulation/string-manipulation";
 import { Employeer } from "../models/people/employeer/employeer";
 import { Observable } from "rxjs";
 

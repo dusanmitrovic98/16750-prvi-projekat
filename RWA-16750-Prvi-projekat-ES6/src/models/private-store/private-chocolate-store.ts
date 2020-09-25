@@ -69,7 +69,10 @@ export class PrivateChocolateStore {
   sellChocolateProduct(chocolateProductType: ChocolateProductType) {
     if (this.isStateOpen()) {
       this.chocolateProductsForSale.setStateToProductRemoval();
-      return this.chocolateProductsForSale.workWithStorageOnce(null, chocolateProductType);
+      let product: ChocolateProduct;
+      product = this.chocolateProductsForSale.workWithStorageOnce(null, chocolateProductType);
+      this.soldProducts.addProductToList(product);
+      return product;
     }
   }
 

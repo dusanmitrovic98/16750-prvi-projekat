@@ -1,8 +1,8 @@
-import { Employee } from "../../people/employee/employee";
-import { ChocolateProductList } from "../../chocolate-products/chocolate-product-list";
-import { ChocolateMaterialList } from "../../chocolate-materials/chocolate-material-list";
-import { ChocolateMaterial } from "../../chocolate-materials/chocolate-material";
-import { ChocolateProduct } from "../../chocolate-products/chocolate-product";
+import { Employee } from "../people/employee/employee";
+import { ChocolateProductList } from "../chocolate-products/chocolate-product-list";
+import { ChocolateMaterialList } from "../chocolate-materials/chocolate-material-list";
+import { ChocolateMaterial } from "../chocolate-materials/chocolate-material";
+import { ChocolateProduct } from "../chocolate-products/chocolate-product";
 
 enum PalletJackState {
   Avaible = "Avaible",
@@ -119,7 +119,7 @@ export class PalletJack {
   }
 
   isCargoStateChocolateProductLoading() {
-    return this.cargoWorkState === PalletJackCargoWorkState.ChocolateMaterialUnloading;
+    return this.cargoWorkState === PalletJackCargoWorkState.ChocolateProductLoading;
   }
 
   isCargoStateChocolateProductUnloading() {
